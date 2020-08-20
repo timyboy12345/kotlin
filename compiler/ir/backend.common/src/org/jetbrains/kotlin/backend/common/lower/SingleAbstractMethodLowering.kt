@@ -111,7 +111,7 @@ abstract class SingleAbstractMethodLowering(val context: CommonBackendContext) :
 
             return if (superType.isNullable() && invokable.type.isNullable()) {
                 irBlock(invokable, null, superType) {
-                    val invokableVariable = irTemporary(invokable)
+                    val invokableVariable = createTmpVariable(invokable)
                     val instance = irCall(implementation.constructors.single()).apply {
                         putValueArgument(0, irGet(invokableVariable))
                     }
@@ -123,7 +123,7 @@ abstract class SingleAbstractMethodLowering(val context: CommonBackendContext) :
                 // otherwise, e.g. if the argument constructs an anonymous object, resulting in new-new-<init>-<init>.
                 // (See KT-21781 for a similar problem with anonymous object constructor arguments.)
                 irBlock(invokable, null, superType) {
-                    val invokableVariable = irTemporary(invokable)
+                    val invokableVariable = createTmpVariable(invokable)
                     +irCall(implementation.constructors.single()).apply { putValueArgument(0, irGet(invokableVariable)) }
                 }
             } else {
