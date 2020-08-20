@@ -19,11 +19,14 @@ package org.jetbrains.kotlin.backend.common
 import org.jetbrains.kotlin.ir.IrElement
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.expressions.IrBody
+import org.jetbrains.kotlin.ir.util.fileOrNull
+import org.jetbrains.kotlin.ir.util.fqNameWhenAvailable
 import org.jetbrains.kotlin.ir.util.transformFlat
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitor
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitorVoid
 import org.jetbrains.kotlin.ir.visitors.acceptChildrenVoid
 import org.jetbrains.kotlin.ir.visitors.acceptVoid
+import org.jetbrains.kotlin.name.FqName
 
 interface FileLoweringPass {
     fun lower(irFile: IrFile)
@@ -112,7 +115,34 @@ fun DeclarationContainerLoweringPass.runOnFilePostfix(irFile: IrFile) {
     this.lower(irFile as IrDeclarationContainer)
 }
 
+class LoweringException(d: IrDeclaration, cause: Throwable): Exception("Exception while lowering ${d::class.simpleName} named ${(d as? IrDeclarationWithName)?.fqNameWhenAvailable} from file ${d.fileOrNull}", cause)
+
+fun BodyLoweringPass.withExceptions(): BodyLoweringPass {
+    return object : BodyLoweringPass {
+        override fun lower(irBody: IrBody, container: IrDeclaration) {
+            try {
+                this@withExceptions.lower(irBody, container)
+            } catch (t: Throwable) {
+                throw LoweringException(container, t)
+            }
+        }
+    }
+}
+
+fun DeclarationTransformer.withExceptions(): DeclarationTransformer {
+    return object : DeclarationTransformer {
+        override fun transformFlat(declaration: IrDeclaration): List<IrDeclaration>? {
+            try {
+                return this@withExceptions.transformFlat(declaration)
+            } catch (t: Throwable) {
+                throw LoweringException(declaration, t)
+            }
+        }
+    }
+}
+
 fun BodyLoweringPass.runOnFilePostfix(irFile: IrFile, withLocalDeclarations: Boolean = false, allowDeclarationModification: Boolean = false) {
+    val we = withExceptions()
     ArrayList(irFile.declarations).forEach {
         it.accept(object : IrElementVisitor<Unit, IrDeclaration?> {
             override fun visitElement(element: IrElement, data: IrDeclaration?) {
@@ -132,10 +162,10 @@ fun BodyLoweringPass.runOnFilePostfix(irFile: IrFile, withLocalDeclarations: Boo
             override fun visitBody(body: IrBody, data: IrDeclaration?) {
                 if (withLocalDeclarations) body.acceptChildren(this, null)
                 if (allowDeclarationModification) {
-                    lower(body, data!!)
+                    we.lower(body, data!!)
                 } else {
                     stageController.bodyLowering {
-                        lower(body, data!!)
+                        we.lower(body, data!!)
                     }
                 }
             }
@@ -188,6 +218,7 @@ fun DeclarationTransformer.toFileLoweringPass(): FileLoweringPass {
 }
 
 fun DeclarationTransformer.runPostfix(withLocalDeclarations: Boolean = false): DeclarationTransformer {
+    val we = withExceptions()
     return object : DeclarationTransformer {
         override fun transformFlat(declaration: IrDeclaration): List<IrDeclaration>? {
             declaration.acceptVoid(object : IrElementVisitorVoid {
@@ -206,7 +237,7 @@ fun DeclarationTransformer.runPostfix(withLocalDeclarations: Boolean = false): D
                     declaration.acceptChildrenVoid(this)
 
                     for (v in declaration.valueParameters) {
-                        val result = this@runPostfix.transformFlatRestricted(v)
+                        val result = we.transformFlatRestricted(v)
                         if (result != null) error("Don't know how to add value parameters")
                     }
                 }
@@ -220,7 +251,7 @@ fun DeclarationTransformer.runPostfix(withLocalDeclarations: Boolean = false): D
 
                         acceptVoid(visitor)
 
-                        val result = this@runPostfix.transformFlatRestricted(this)
+                        val result = we.transformFlatRestricted(this)
                         if (result != null) {
                             (parent as? IrDeclarationContainer)?.let {
                                 var index = it.declarations.indexOf(this)
@@ -246,12 +277,12 @@ fun DeclarationTransformer.runPostfix(withLocalDeclarations: Boolean = false): D
                     declaration.typeParameters.forEach { it.accept(this, null) }
                     ArrayList(declaration.declarations).forEach { it.accept(this, null) }
 
-                    declaration.declarations.transformFlat(this@runPostfix::transformFlatRestricted)
+                    declaration.declarations.transformFlat(we::transformFlatRestricted)
                 }
 
                 override fun visitScript(declaration: IrScript) {
                     ArrayList(declaration.declarations).forEach { it.accept(this, null) }
-                    declaration.declarations.transformFlat(this@runPostfix::transformFlatRestricted)
+                    declaration.declarations.transformFlat(we::transformFlatRestricted)
 
                     if (withLocalDeclarations) {
                         declaration.statements.forEach { it.accept(this, null) }
@@ -261,7 +292,7 @@ fun DeclarationTransformer.runPostfix(withLocalDeclarations: Boolean = false): D
                 }
             })
 
-            return this@runPostfix.transformFlatRestricted(declaration)
+            return we.transformFlatRestricted(declaration)
         }
     }
 }
