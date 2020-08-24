@@ -104,8 +104,8 @@ fun compile(
         val transformer = IrModuleToJsTransformer(
             context,
             mainArguments,
-            fullJs = generateFullJs,
-            dceJs = generateDceJs,
+            fullJs = true,
+            dceJs = false,
             multiModule = multiModule,
             relativeRequirePath = relativeRequirePath
         )

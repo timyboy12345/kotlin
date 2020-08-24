@@ -267,10 +267,10 @@ fun loadIr(
 
             val deserializedModuleFragments = sortDependencies(allDependencies.getFullList(), depsDescriptors.descriptors).map {
                 val strategy =
-                    if (it == mainModule.lib)
+//                    if (it == mainModule.lib)
                         DeserializationStrategy.ALL
-                    else
-                        DeserializationStrategy.EXPLICITLY_EXPORTED
+//                    else
+//                        DeserializationStrategy.EXPLICITLY_EXPORTED
 
                 irLinker.deserializeIrModuleHeader(depsDescriptors.getModuleDescriptor(it), it, strategy)
             }
