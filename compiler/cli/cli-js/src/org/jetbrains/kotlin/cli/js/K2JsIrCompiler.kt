@@ -230,7 +230,7 @@ class K2JsIrCompiler : CLICompiler<K2JSCompilerArguments>() {
                     generateFullJs = !arguments.irDce,
                     generateDceJs = arguments.irDce,
                     dceDriven = arguments.irDceDriven,
-                    multiModule = arguments.irPerModule,
+                    multiModule = true,//arguments.irPerModule,
                     relativeRequirePath = true
                 )
             } catch (e: JsIrCompilationError) {
