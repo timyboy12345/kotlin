@@ -683,7 +683,7 @@ val loweringList = listOf<Lowering>(
     propertyReferenceLoweringPhase,
     interopCallableReferenceLoweringPhase,
     returnableBlockLoweringPhase,
-    forLoopsLoweringPhase,
+//    forLoopsLoweringPhase,
     primitiveCompanionLoweringPhase,
     propertyAccessorInlinerLoweringPhase,
     foldConstantLoweringPhase,

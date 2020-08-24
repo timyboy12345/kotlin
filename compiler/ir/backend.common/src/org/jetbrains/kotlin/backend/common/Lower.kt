@@ -115,7 +115,7 @@ fun DeclarationContainerLoweringPass.runOnFilePostfix(irFile: IrFile) {
     this.lower(irFile as IrDeclarationContainer)
 }
 
-class LoweringException(d: IrDeclaration, cause: Throwable): Exception("Exception while lowering ${d::class.simpleName} named ${(d as? IrDeclarationWithName)?.fqNameWhenAvailable} from file ${d.fileOrNull}", cause)
+class LoweringException(d: IrDeclaration, cause: Throwable): Exception("Exception while lowering ${d::class.simpleName} named ${(d as? IrDeclarationWithName)?.fqNameWhenAvailable} from file ${d.fileOrNull?.fileEntry?.name}", cause)
 
 fun BodyLoweringPass.withExceptions(): BodyLoweringPass {
     return object : BodyLoweringPass {

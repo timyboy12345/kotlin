@@ -126,11 +126,11 @@ fun <Function : FunctionHandle> findConcreteSuperDeclaration(function: Function)
 
     val concreteRelevantDeclarations = result.filter { !it.isAbstract && it.mayBeUsedAsSuperImplementation }
     if (concreteRelevantDeclarations.size != 1) {
-        if (!function.mightBeIncorrectCode) {
-            error("Concrete fake override $function should have exactly one concrete super-declaration: $concreteRelevantDeclarations")
-        } else {
+//        if (!function.mightBeIncorrectCode) {
+//            error("Concrete fake override $function should have exactly one concrete super-declaration: $concreteRelevantDeclarations")
+//        } else {
             return null
-        }
+//        }
     }
 
     return concreteRelevantDeclarations[0]
