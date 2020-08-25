@@ -867,7 +867,9 @@ abstract class WrappedPropertyAccessorDescriptor : WrappedSimpleFunctionDescript
 
     override fun getOriginal(): WrappedPropertyAccessorDescriptor = this
 
-    override fun getOverriddenDescriptors() = super.getOverriddenDescriptors().map { it as PropertyAccessorDescriptor }
+    override fun getOverriddenDescriptors() = super.getOverriddenDescriptors().mapNotNull {
+        it as? PropertyAccessorDescriptor
+    }
 
     override fun getCorrespondingProperty(): PropertyDescriptor = owner.correspondingPropertySymbol!!.descriptor
 
