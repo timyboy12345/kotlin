@@ -238,6 +238,7 @@ class K2JsIrCompiler : CLICompiler<K2JSCompilerArguments>() {
                     relativeRequirePath = true,
                     traceMethods = arguments.traceMethods,
                     focusOnTest = arguments.irFocusOnTest,
+                    forceAllJs = arguments.irForceAllJs,
                 )
             } catch (e: JsIrCompilationError) {
                 return COMPILATION_ERROR

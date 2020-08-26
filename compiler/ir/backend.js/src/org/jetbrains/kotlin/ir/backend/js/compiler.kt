@@ -50,11 +50,12 @@ fun compile(
     relativeRequirePath: Boolean = false,
     traceMethods: Boolean = false,
     focusOnTest: String? = null,
+    forceAllJs: Boolean = false,
 ): CompilerResult {
     stageController = object : StageController {}
 
     val (moduleFragment: IrModuleFragment, dependencyModules, irBuiltIns, symbolTable, deserializer) =
-        loadIr(project, mainModule, analyzer, configuration, allDependencies, friendDependencies)
+        loadIr(project, mainModule, analyzer, configuration, allDependencies, friendDependencies, forceAllJs)
 
     val moduleDescriptor = moduleFragment.descriptor
 

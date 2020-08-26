@@ -215,7 +215,8 @@ fun loadIr(
     analyzer: AbstractAnalyzerWithCompilerReport,
     configuration: CompilerConfiguration,
     allDependencies: KotlinLibraryResolveResult,
-    friendDependencies: List<KotlinLibrary>
+    friendDependencies: List<KotlinLibrary>,
+    forceAllJs: Boolean = false,
 ): IrModuleInfo {
     val depsDescriptors = ModulesStructure(project, mainModule, analyzer, configuration, allDependencies, friendDependencies)
     val deserializeFakeOverrides = configuration.getBoolean(CommonConfigurationKeys.DESERIALIZE_FAKE_OVERRIDES)
@@ -267,10 +268,10 @@ fun loadIr(
 
             val deserializedModuleFragments = sortDependencies(allDependencies.getFullList(), depsDescriptors.descriptors).map {
                 val strategy =
-//                    if (it == mainModule.lib)
+                    if (forceAllJs || it == mainModule.lib)
                         DeserializationStrategy.ALL
-//                    else
-//                        DeserializationStrategy.EXPLICITLY_EXPORTED
+                    else
+                        DeserializationStrategy.EXPLICITLY_EXPORTED
 
                 irLinker.deserializeIrModuleHeader(depsDescriptors.getModuleDescriptor(it), it, strategy)
             }
