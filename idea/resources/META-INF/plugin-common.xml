@@ -233,6 +233,10 @@
 
     <projectService serviceImplementation="org.jetbrains.kotlin.idea.compiler.configuration.KotlinCompilerWorkspaceSettings"/>
 
+    <projectService serviceImplementation="org.jetbrains.kotlin.idea.compiler.configuration.KotlinCompilerArgumentsCacheProjectComponent"/>
+
+    <moduleService serviceImplementation="org.jetbrains.kotlin.idea.compiler.configuration.KotlinCompilerArgumentsCacheIndexesModuleComponent"/>
+
     <projectService serviceImplementation="org.jetbrains.kotlin.asJava.classes.FacadeCache"/>
 
 

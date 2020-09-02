@@ -40,8 +40,12 @@ import org.jetbrains.kotlin.config.*
 import org.jetbrains.kotlin.extensions.ProjectExtensionDescriptor
 import org.jetbrains.kotlin.gradle.ArgsInfo
 import org.jetbrains.kotlin.gradle.ArgsInfoImpl
+import org.jetbrains.kotlin.gradle.CachedArgsInfo
+import org.jetbrains.kotlin.gradle.CompilerArgumentsMapper
 import org.jetbrains.kotlin.ide.konan.NativeLibraryKind
 import org.jetbrains.kotlin.idea.compiler.configuration.KotlinCommonCompilerArgumentsHolder
+import org.jetbrains.kotlin.idea.compiler.configuration.KotlinCompilerArgumentsCacheProjectComponent
+import org.jetbrains.kotlin.idea.compiler.configuration.kotlinCompilerArgumentsCacheIndexesHolder
 import org.jetbrains.kotlin.idea.configuration.GradlePropertiesFileFacade.Companion.KOTLIN_CODE_STYLE_GRADLE_SETTING
 import org.jetbrains.kotlin.idea.configuration.klib.KotlinNativeLibraryNameUtil.KOTLIN_NATIVE_LIBRARY_PREFIX
 import org.jetbrains.kotlin.idea.facet.*
@@ -289,21 +293,10 @@ fun configureFacetByGradleModule(
     ideModule.hasExternalSdkConfiguration = sourceSetNode?.data?.sdkName != null
 
     val projectDataNode = moduleNode.getDataNode(ProjectKeys.PROJECT) ?: return null
-    val mapper = projectDataNode.projectCompilerArgumentsMapper
 
     val cachedArgsInfo = moduleNode.cachedCompilerArgumentsBySourceSet?.get(sourceSetName ?: "main")
     if (cachedArgsInfo != null) {
-        val currentArguments = cachedArgsInfo.currentCommonArgumentsCacheIds.map { mapper.getCommonArgument(it) } +
-                cachedArgsInfo.currentClasspathArgumentsCacheIds.map { mapper.getClasspathArgument(it) }
-
-        val defaultArguments = cachedArgsInfo.defaultCommonArgumentsCacheIds.map { mapper.getCommonArgument(it) } +
-                cachedArgsInfo.defaultClasspathArgumentsCacheIds.map { mapper.getClasspathArgument(it) }
-
-        val dependencyClasspath = cachedArgsInfo.dependencyClasspathCacheIds.map { mapper.getClasspathArgument(it) }
-
-        val argsInfo = ArgsInfoImpl(currentArguments, defaultArguments, dependencyClasspath)
-        configureFacetByCompilerArguments(kotlinFacet, argsInfo, modelsProvider)
-
+        configureFacetByCachedCompilerArguments(kotlinFacet, cachedArgsInfo, projectDataNode.projectCompilerArgumentsMapper, modelsProvider)
     }
 
     with(kotlinFacet.configuration.settings) {
@@ -319,6 +312,38 @@ fun configureFacetByGradleModule(
     }
 
     return kotlinFacet
+}
+
+fun configureFacetByCachedCompilerArguments(
+    kotlinFacet: KotlinFacet,
+    cachedArgsInfo: CachedArgsInfo,
+    compilerArgumentsMapper: CompilerArgumentsMapper,
+    modelsProvider: IdeModifiableModelsProvider?
+) {
+    //Update persistent storage for whole project (TODO move this to Project-Level data service which invokes before Module-level)
+    val compilerArgumentsCacheStorage = KotlinCompilerArgumentsCacheProjectComponent.getInstance(kotlinFacet.module.project)
+    compilerArgumentsCacheStorage.idToCompilerArguments = compilerArgumentsMapper.copyCache()
+
+    //Update persistent storage for module's compiler argument caches
+    val moduleIndexesHolder = kotlinFacet.module.kotlinCompilerArgumentsCacheIndexesHolder
+    with(moduleIndexesHolder) {
+        currentCommonArgumentsCacheIds = cachedArgsInfo.currentCommonArgumentsCacheIds.toList()
+        currentClasspathArgumentsCacheIds = cachedArgsInfo.currentClasspathArgumentsCacheIds.map { it.toList() }
+        defaultCommonArgumentsCacheIds = cachedArgsInfo.defaultCommonArgumentsCacheIds.toList()
+        defaultClasspathArgumentsCacheIds = cachedArgsInfo.defaultClasspathArgumentsCacheIds.map { it.toList() }
+        dependencyClasspathCacheIds = cachedArgsInfo.dependencyClasspathCacheIds.map { it.toList() }
+    }
+
+    val currentArguments = cachedArgsInfo.currentCommonArgumentsCacheIds.map { compilerArgumentsMapper.getCommonArgument(it) } +
+            cachedArgsInfo.currentClasspathArgumentsCacheIds.map { compilerArgumentsMapper.getClasspathArgument(it) }
+
+    val defaultArguments = cachedArgsInfo.defaultCommonArgumentsCacheIds.map { compilerArgumentsMapper.getCommonArgument(it) } +
+            cachedArgsInfo.defaultClasspathArgumentsCacheIds.map { compilerArgumentsMapper.getClasspathArgument(it) }
+
+    val dependencyClasspath = cachedArgsInfo.dependencyClasspathCacheIds.map { compilerArgumentsMapper.getClasspathArgument(it) }
+
+    val argsInfo = ArgsInfoImpl(currentArguments, defaultArguments, dependencyClasspath)
+    configureFacetByCompilerArguments(kotlinFacet, argsInfo, modelsProvider)
 }
 
 fun configureFacetByCompilerArguments(kotlinFacet: KotlinFacet, argsInfo: ArgsInfo, modelsProvider: IdeModifiableModelsProvider?) {

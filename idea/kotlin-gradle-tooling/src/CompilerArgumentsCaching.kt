@@ -47,6 +47,7 @@ fun CachedCompilerArgumentBySourceSet.deepCopy(): CachedCompilerArgumentBySource
 }
 
 interface ICompilerArgumentsMapper : Serializable {
+    val nextId: Int
     fun getArgumentCache(argument: String): Int?
     fun cacheCommonArgument(commonArgument: String): Int
     fun getCommonArgument(id: Int): String
@@ -63,7 +64,8 @@ open class CompilerArgumentsMapper(val initialId: Int = 0) : ICompilerArgumentsM
         compilerArgumentToId.putAll(otherMapper.compilerArgumentToId)
         nextId = otherMapper.nextId
     }
-    protected var nextId = initialId
+
+    final override var nextId = initialId
     protected val idToCompilerArguments: MutableMap<Int, String> = mutableMapOf()
     protected val compilerArgumentToId: MutableMap<String, Int> = mutableMapOf()
 
@@ -127,5 +129,6 @@ class CompilerArgumentsMapperWithMerge : CompilerArgumentsMapper(), IWithMergeMa
             idToCompilerArguments[id] = arg
             compilerArgumentToId[arg] = id
         }
+        nextId = maxOf(nextId, mapper.nextId)
     }
 }
