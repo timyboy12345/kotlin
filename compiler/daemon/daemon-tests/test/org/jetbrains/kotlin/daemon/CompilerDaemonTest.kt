@@ -48,6 +48,8 @@ import kotlin.script.experimental.dependencies.asSuccess
 import kotlin.script.templates.ScriptTemplateDefinition
 import kotlin.test.fail
 
+import org.jetbrains.kotlin.cli.common.repl.*
+
 val TIMEOUT_DAEMON_RUNNER_EXIT_MS = 10000L
 
 class CompilerDaemonTest : KotlinIntegrationTestBase() {

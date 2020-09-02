@@ -39,6 +39,8 @@ import java.io.File
 import java.net.URLClassLoader
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.locks.ReentrantReadWriteLock
+import org.jetbrains.kotlin.cli.common.repl.*
+import org.jetbrains.kotlin.common.repl.GenericReplCompilingEvaluator
 
 class GenericReplTest : KtUsefulTestCase() {
     fun testReplBasics() {

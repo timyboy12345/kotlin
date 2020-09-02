@@ -19,6 +19,7 @@ object OutputMessageUtil {
         return out.toString()
     }
 
+    @JvmStatic
     fun formatOutputMessage(sourceFiles: Collection<File?>, outputFile: File): String {
         return """
             $OUTPUT_FILES_PREFIX
@@ -28,6 +29,7 @@ object OutputMessageUtil {
             """.trimIndent()
     }
 
+    @JvmStatic
     fun parseOutputMessage(message: String): Output? {
         val strings = message.split("\n".toRegex()).toTypedArray()
 
