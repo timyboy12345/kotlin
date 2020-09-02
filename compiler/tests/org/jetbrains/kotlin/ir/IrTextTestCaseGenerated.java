@@ -1716,6 +1716,11 @@ public class IrTextTestCaseGenerated extends AbstractIrTextTestCase {
             runTest("compiler/testData/ir/irText/firProblems/candidateSymbol.kt");
         }
 
+        @TestMetadata("DeepCopyIrTree.kt")
+        public void testDeepCopyIrTree() throws Exception {
+            runTest("compiler/testData/ir/irText/firProblems/DeepCopyIrTree.kt");
+        }
+
         @TestMetadata("deprecated.kt")
         public void testDeprecated() throws Exception {
             runTest("compiler/testData/ir/irText/firProblems/deprecated.kt");

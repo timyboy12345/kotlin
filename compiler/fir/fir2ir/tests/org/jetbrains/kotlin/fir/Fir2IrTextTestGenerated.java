@@ -1717,6 +1717,11 @@ public class Fir2IrTextTestGenerated extends AbstractFir2IrTextTest {
             runTest("compiler/testData/ir/irText/firProblems/candidateSymbol.kt");
         }
 
+        @TestMetadata("DeepCopyIrTree.kt")
+        public void testDeepCopyIrTree() throws Exception {
+            runTest("compiler/testData/ir/irText/firProblems/DeepCopyIrTree.kt");
+        }
+
         @TestMetadata("deprecated.kt")
         public void testDeprecated() throws Exception {
             runTest("compiler/testData/ir/irText/firProblems/deprecated.kt");
