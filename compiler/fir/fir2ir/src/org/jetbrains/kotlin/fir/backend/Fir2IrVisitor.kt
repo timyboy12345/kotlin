@@ -594,7 +594,10 @@ class Fir2IrVisitor(
         }
     }
 
-    private fun FirBlock.convertToIrExpressionOrBlock(origin: IrStatementOrigin? = null): IrExpression {
+    private fun FirBlock.convertToIrExpressionOrBlock(
+        origin: IrStatementOrigin? = null,
+        forceUnitType: Boolean = false
+    ): IrExpression {
         if (statements.size == 1) {
             val firStatement = statements.single()
             if (firStatement is FirExpression) {
@@ -602,7 +605,8 @@ class Fir2IrVisitor(
             }
         }
         val type =
-            (statements.lastOrNull() as? FirExpression)?.typeRef?.toIrType() ?: irBuiltIns.unitType
+            if (forceUnitType) irBuiltIns.unitType
+            else (statements.lastOrNull() as? FirExpression)?.typeRef?.toIrType() ?: irBuiltIns.unitType
         return convertWithOffsets { startOffset, endOffset ->
             if (origin == IrStatementOrigin.DO_WHILE_LOOP) {
                 IrCompositeImpl(
@@ -811,7 +815,7 @@ class Fir2IrVisitor(
             ).apply {
                 loopMap[doWhileLoop] = this
                 label = doWhileLoop.label?.name
-                body = doWhileLoop.block.convertToIrExpressionOrBlock(origin)
+                body = doWhileLoop.block.convertToIrExpressionOrBlock(origin, forceUnitType = true)
                 condition = convertToIrExpression(doWhileLoop.condition)
                 loopMap.remove(doWhileLoop)
             }
@@ -826,7 +830,7 @@ class Fir2IrVisitor(
                 loopMap[whileLoop] = this
                 label = whileLoop.label?.name
                 condition = convertToIrExpression(whileLoop.condition)
-                body = whileLoop.block.convertToIrExpressionOrBlock(origin)
+                body = whileLoop.block.convertToIrExpressionOrBlock(origin, forceUnitType = true)
                 loopMap.remove(whileLoop)
             }
         }
