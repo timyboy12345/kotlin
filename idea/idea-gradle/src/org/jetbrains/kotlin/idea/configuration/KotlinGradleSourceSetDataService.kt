@@ -44,8 +44,8 @@ import org.jetbrains.kotlin.gradle.CachedArgsInfo
 import org.jetbrains.kotlin.gradle.CompilerArgumentsMapper
 import org.jetbrains.kotlin.ide.konan.NativeLibraryKind
 import org.jetbrains.kotlin.idea.compiler.configuration.KotlinCommonCompilerArgumentsHolder
-import org.jetbrains.kotlin.idea.compiler.configuration.KotlinCompilerArgumentsCacheProjectComponent
 import org.jetbrains.kotlin.idea.compiler.configuration.kotlinCompilerArgumentsCacheIndexesHolder
+import org.jetbrains.kotlin.idea.compiler.configuration.kotlinCompilerArgumentsCacheStorage
 import org.jetbrains.kotlin.idea.configuration.GradlePropertiesFileFacade.Companion.KOTLIN_CODE_STYLE_GRADLE_SETTING
 import org.jetbrains.kotlin.idea.configuration.klib.KotlinNativeLibraryNameUtil.KOTLIN_NATIVE_LIBRARY_PREFIX
 import org.jetbrains.kotlin.idea.facet.*
@@ -321,7 +321,7 @@ fun configureFacetByCachedCompilerArguments(
     modelsProvider: IdeModifiableModelsProvider?
 ) {
     //Update persistent storage for whole project (TODO move this to Project-Level data service which invokes before Module-level)
-    val compilerArgumentsCacheStorage = KotlinCompilerArgumentsCacheProjectComponent.getInstance(kotlinFacet.module.project)
+    val compilerArgumentsCacheStorage = kotlinFacet.module.project.kotlinCompilerArgumentsCacheStorage
     compilerArgumentsCacheStorage.idToCompilerArguments = compilerArgumentsMapper.copyCache()
 
     //Update persistent storage for module's compiler argument caches

@@ -20,9 +20,7 @@ import com.intellij.openapi.util.text.StringUtil
 import org.jetbrains.kotlin.cli.common.arguments.*
 import org.jetbrains.kotlin.compilerRunner.ArgumentUtils
 import org.jetbrains.kotlin.config.*
-import org.jetbrains.kotlin.idea.compiler.configuration.Kotlin2JvmCompilerArgumentsHolder
-import org.jetbrains.kotlin.idea.compiler.configuration.KotlinCommonCompilerArgumentsHolder
-import org.jetbrains.kotlin.idea.compiler.configuration.KotlinCompilerSettings
+import org.jetbrains.kotlin.idea.compiler.configuration.*
 import org.jetbrains.kotlin.idea.configuration.externalCompilerVersion
 import org.jetbrains.kotlin.idea.core.isAndroidModule
 import org.jetbrains.kotlin.idea.framework.KotlinSdkType
@@ -64,6 +62,9 @@ fun KotlinFacetSettings.initializeIfNeeded(
     compilerVersion: String? = null
 ) {
     val project = module.project
+
+    val projectCompilerArgumentsCacheStorage = project.kotlinCompilerArgumentsCacheStorage
+    val moduleCompilerArgumentsCacheIndexesHolder = module.kotlinCompilerArgumentsCacheIndexesHolder
 
     val shouldInferLanguageLevel = languageLevel == null
     val shouldInferAPILevel = apiLevel == null
