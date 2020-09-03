@@ -24,6 +24,8 @@ import kotlin.reflect.KAnnotatedElement
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.withNullability
+import org.jetbrains.kotlin.cli.common.arguments.*
+import org.jetbrains.kotlin.common.arguments.K2JSCompilerArguments
 
 // Additional properties that should be included in interface
 @Suppress("unused")
