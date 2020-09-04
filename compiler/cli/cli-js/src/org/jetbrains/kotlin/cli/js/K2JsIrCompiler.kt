@@ -244,7 +244,7 @@ class K2JsIrCompiler : CLICompiler<K2JSCompilerArguments>() {
                 return COMPILATION_ERROR
             }
 
-            val jsCode = compiledModule.jsCode!! //if (arguments.irDce && !arguments.irDceDriven) compiledModule.dceJsCode!! else compiledModule.jsCode!!
+            val jsCode = if (arguments.irDce && !arguments.irDceDriven) compiledModule.dceJsCode!! else compiledModule.jsCode!!
             outputFile.writeText(jsCode.mainModule)
             jsCode.dependencies.forEach { (name, content) ->
                 outputFile.resolveSibling("$name.js").writeText(content)
