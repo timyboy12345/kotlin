@@ -234,7 +234,7 @@ class K2JsIrCompiler : CLICompiler<K2JSCompilerArguments>() {
                     generateFullJs = !arguments.irDce,
                     generateDceJs = arguments.irDce,
                     dceDriven = arguments.irDceDriven,
-                    multiModule = config.configuration.get(CommonConfigurationKeys.MODULE_NAME)!!.contains("all-js"),//arguments.irPerModule,
+                    multiModule = arguments.irPerModule,
                     relativeRequirePath = true,
                     traceMethods = arguments.traceMethods,
                     focusOnTest = arguments.irFocusOnTest,
