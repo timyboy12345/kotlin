@@ -187,9 +187,7 @@ fun IrTypeParameter.copyToWithoutSuperTypes(
 
 fun IrFunction.copyReceiverParametersFrom(from: IrFunction) {
     dispatchReceiverParameter = from.dispatchReceiverParameter?.let {
-        val newDescriptor = WrappedReceiverParameterDescriptor()
-        IrValueParameterImpl(it.startOffset, it.endOffset, it.origin, newDescriptor, it.type, it.varargElementType).also {
-            newDescriptor.bind(it)
+        IrValueParameterImpl(it.startOffset, it.endOffset, it.origin, it.descriptor, it.type, it.varargElementType).also {
             it.parent = this
         }
     }
