@@ -186,9 +186,9 @@ fun IrConstructor.callsSuper(irBuiltIns: IrBuiltIns): Boolean {
             val delegatingClass = expression.symbol.owner.parent as IrClass
             // TODO: figure out why Lazy IR multiplies Declarations for descriptors and fix it
             // It happens because of IrBuiltIns whose IrDeclarations are different for runtime and test
-            if (delegatingClass.descriptor == superClass.classifierOrFail.descriptor)
+            if (delegatingClass.symbol == superClass.classifierOrFail)
                 callsSuper = true
-            else if (delegatingClass.descriptor != constructedClass.descriptor)
+            else if (delegatingClass.symbol != constructedClass.symbol)
                 throw AssertionError(
                     "Expected either call to another constructor of the class being constructed or" +
                             " call to super class constructor. But was: $delegatingClass with '${delegatingClass.name}' name"

@@ -149,9 +149,9 @@ fun IrValueParameter.copyTo(
     isNoinline: Boolean = this.isNoinline
 ): IrValueParameter {
     val descriptor = if (index < 0) {
-        WrappedReceiverParameterDescriptor(this.descriptor.annotations, this.descriptor.source)
+        WrappedReceiverParameterDescriptor()
     } else {
-        WrappedValueParameterDescriptor(this.descriptor.annotations, this.descriptor.source)
+        WrappedValueParameterDescriptor()
     }
     val symbol = IrValueParameterSymbolImpl(descriptor)
     val defaultValueCopy = defaultValue?.let { originalDefault ->
@@ -187,7 +187,9 @@ fun IrTypeParameter.copyToWithoutSuperTypes(
 
 fun IrFunction.copyReceiverParametersFrom(from: IrFunction) {
     dispatchReceiverParameter = from.dispatchReceiverParameter?.let {
-        IrValueParameterImpl(it.startOffset, it.endOffset, it.origin, it.descriptor, it.type, it.varargElementType).also {
+        val newDescriptor = WrappedReceiverParameterDescriptor()
+        IrValueParameterImpl(it.startOffset, it.endOffset, it.origin, newDescriptor, it.type, it.varargElementType).also {
+            newDescriptor.bind(it)
             it.parent = this
         }
     }
@@ -460,18 +462,20 @@ fun IrClass.createParameterDeclarations() {
 fun IrFunction.createDispatchReceiverParameter(origin: IrDeclarationOrigin? = null) {
     assert(dispatchReceiverParameter == null)
 
+    val newDescriptor = WrappedReceiverParameterDescriptor()
     dispatchReceiverParameter = IrValueParameterImpl(
         startOffset, endOffset,
         origin ?: parentAsClass.origin,
-        IrValueParameterSymbolImpl(parentAsClass.thisReceiver!!.descriptor),
+        IrValueParameterSymbolImpl(newDescriptor),
         Name.special("<this>"),
-        0,
+        -1,
         parentAsClass.defaultType,
         null,
         false,
         false
     ).apply {
         parent = this@createDispatchReceiverParameter
+        newDescriptor.bind(this)
     }
 }
 

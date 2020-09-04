@@ -661,7 +661,7 @@ class LocalDeclarationsLowering(
                 IrValueParameterImpl(
                     p.startOffset,
                     p.endOffset,
-                    if (p.descriptor is ReceiverParameterDescriptor && newDeclaration is IrConstructor)
+                    if (p is IrValueParameter && p.index < 0 && newDeclaration is IrConstructor)
                         BOUND_RECEIVER_PARAMETER else BOUND_VALUE_PARAMETER,
                     IrValueParameterSymbolImpl(parameterDescriptor),
                     suggestNameForCapturedValue(p, generatedNames),

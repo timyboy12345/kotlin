@@ -550,7 +550,8 @@ open class DeepCopyIrTreeWithSymbols(
             expression.startOffset, expression.endOffset,
             expression.type.remapType(),
             newConstructor,
-            expression.typeArgumentsCount
+            expression.typeArgumentsCount,
+            expression.valueArgumentsCount
         ).apply {
             copyRemappedTypeArgumentsFrom(expression)
             transformValueArguments(expression)

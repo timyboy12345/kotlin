@@ -76,7 +76,8 @@ private class ArrayConstructorTransformer(
             val index = createTmpVariable(irInt(0), isMutable = true)
             val sizeVar = createTmpVariable(size)
             val result = createTmpVariable(irCall(sizeConstructor, expression.type).apply {
-                copyTypeArgumentsFrom(expression)
+
+            copyTypeArgumentsFrom(expression)
                 putValueArgument(0, irGet(sizeVar))
             })
 
