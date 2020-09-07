@@ -1,6 +1,102 @@
 {
   "9": {
     "pos": {
+      "10": [
+        {
+          "specVersion": "1.4-rfc+0.3-603",
+          "casesNumber": 6,
+          "description": "smartcast absence from operator assignment",
+          "path": "compiler/tests-spec/testData/diagnostics/linked/type-inference/smart-casts/smart-cast-types/p-9/pos/10.2.kt",
+          "unexpectedBehaviour": false,
+          "linkType": "main",
+          "helpers": "checkType"
+        },
+        {
+          "specVersion": "1.4-rfc+0.3-603",
+          "casesNumber": 8,
+          "description": "nullable variable smartcast from direct assignment of try-catch expression with enums",
+          "path": "compiler/tests-spec/testData/diagnostics/linked/type-inference/smart-casts/smart-cast-types/p-9/pos/10.1.kt",
+          "unexpectedBehaviour": true,
+          "linkType": "main",
+          "helpers": "checkType"
+        },
+        {
+          "specVersion": "1.4-rfc+0.3-603",
+          "casesNumber": 1,
+          "description": "notNull smartcast \u0026 direct assignment smartcast",
+          "path": "compiler/tests-spec/testData/diagnostics/linked/type-inference/smart-casts/smart-cast-types/p-9/pos/1.1.kt",
+          "unexpectedBehaviour": false,
+          "linkType": "primary",
+          "helpers": "checkType"
+        }
+      ],
+      "1": [
+        {
+          "specVersion": "1.4-rfc+0.3-603",
+          "casesNumber": 1,
+          "description": "notNull smartcast \u0026 direct assignment smartcast",
+          "path": "compiler/tests-spec/testData/diagnostics/linked/type-inference/smart-casts/smart-cast-types/p-9/pos/1.1.kt",
+          "unexpectedBehaviour": false,
+          "linkType": "main",
+          "helpers": "checkType"
+        },
+        {
+          "specVersion": "0.1-313",
+          "casesNumber": 0,
+          "description": "Branch false bypass",
+          "path": "compiler/testData/diagnostics/tests/when/BranchFalseBypass.kt",
+          "unexpectedBehaviour": false,
+          "linkType": "primary"
+        },
+        {
+          "specVersion": "0.1-152",
+          "casesNumber": 0,
+          "description": "Exhaustive with nullability check before",
+          "path": "compiler/testData/diagnostics/tests/when/ExhaustiveWithNullabilityCheckBefore.kt",
+          "unexpectedBehaviour": false,
+          "linkType": "primary"
+        },
+        {
+          "specVersion": "0.1-152",
+          "casesNumber": 0,
+          "description": "Exhaustive with nullability check else",
+          "path": "compiler/testData/diagnostics/tests/when/ExhaustiveWithNullabilityCheckElse.kt",
+          "unexpectedBehaviour": false,
+          "linkType": "primary"
+        },
+        {
+          "specVersion": "0.1-313",
+          "casesNumber": 0,
+          "description": "Branch false bypass else",
+          "path": "compiler/testData/diagnostics/tests/when/BranchFalseBypassElse.kt",
+          "unexpectedBehaviour": false,
+          "linkType": "primary"
+        },
+        {
+          "specVersion": "0.1-152",
+          "casesNumber": 0,
+          "description": "Exhaustive with nullability check",
+          "path": "compiler/testData/diagnostics/tests/when/ExhaustiveWithNullabilityCheck.kt",
+          "unexpectedBehaviour": false,
+          "linkType": "primary"
+        },
+        {
+          "specVersion": "0.1-152",
+          "casesNumber": 0,
+          "description": "Exhaustive with nullability check boolean",
+          "path": "compiler/testData/diagnostics/tests/when/ExhaustiveWithNullabilityCheckBoolean.kt",
+          "unexpectedBehaviour": false,
+          "linkType": "primary"
+        },
+        {
+          "specVersion": "0.1-152",
+          "casesNumber": 0,
+          "description": "Kt10809",
+          "path": "compiler/testData/diagnostics/tests/when/kt10809.kt",
+          "unexpectedBehaviour": false,
+          "linkType": "primary"
+        }
+      ],
       "7": [
         {
           "specVersion": "1.4-rfc+0.3-603",
@@ -91,64 +187,6 @@
           "casesNumber": 0,
           "description": "Branch false bypass else",
           "path": "compiler/testData/diagnostics/tests/when/BranchFalseBypassElse.kt",
-          "unexpectedBehaviour": false,
-          "linkType": "primary"
-        }
-      ],
-      "1": [
-        {
-          "specVersion": "0.1-313",
-          "casesNumber": 0,
-          "description": "Branch false bypass",
-          "path": "compiler/testData/diagnostics/tests/when/BranchFalseBypass.kt",
-          "unexpectedBehaviour": false,
-          "linkType": "primary"
-        },
-        {
-          "specVersion": "0.1-152",
-          "casesNumber": 0,
-          "description": "Exhaustive with nullability check before",
-          "path": "compiler/testData/diagnostics/tests/when/ExhaustiveWithNullabilityCheckBefore.kt",
-          "unexpectedBehaviour": false,
-          "linkType": "primary"
-        },
-        {
-          "specVersion": "0.1-152",
-          "casesNumber": 0,
-          "description": "Exhaustive with nullability check else",
-          "path": "compiler/testData/diagnostics/tests/when/ExhaustiveWithNullabilityCheckElse.kt",
-          "unexpectedBehaviour": false,
-          "linkType": "primary"
-        },
-        {
-          "specVersion": "0.1-313",
-          "casesNumber": 0,
-          "description": "Branch false bypass else",
-          "path": "compiler/testData/diagnostics/tests/when/BranchFalseBypassElse.kt",
-          "unexpectedBehaviour": false,
-          "linkType": "primary"
-        },
-        {
-          "specVersion": "0.1-152",
-          "casesNumber": 0,
-          "description": "Exhaustive with nullability check",
-          "path": "compiler/testData/diagnostics/tests/when/ExhaustiveWithNullabilityCheck.kt",
-          "unexpectedBehaviour": false,
-          "linkType": "primary"
-        },
-        {
-          "specVersion": "0.1-152",
-          "casesNumber": 0,
-          "description": "Exhaustive with nullability check boolean",
-          "path": "compiler/testData/diagnostics/tests/when/ExhaustiveWithNullabilityCheckBoolean.kt",
-          "unexpectedBehaviour": false,
-          "linkType": "primary"
-        },
-        {
-          "specVersion": "0.1-152",
-          "casesNumber": 0,
-          "description": "Kt10809",
-          "path": "compiler/testData/diagnostics/tests/when/kt10809.kt",
           "unexpectedBehaviour": false,
           "linkType": "primary"
         }
