@@ -26,10 +26,10 @@ import org.jetbrains.kotlin.serialization.deserialization.AnnotatedCallableKind
 import org.jetbrains.kotlin.serialization.deserialization.ProtoContainer
 import org.jetbrains.kotlin.serialization.deserialization.getName
 
-fun createDeclarationsStubs(
+fun createPackageDeclarationsStubs(
     parentStub: StubElement<out PsiElement>,
     outerContext: ClsStubBuilderContext,
-    protoContainer: ProtoContainer,
+    protoContainer: ProtoContainer.Package,
     packageProto: ProtoBuf.Package
 ) {
     createDeclarationsStubs(
