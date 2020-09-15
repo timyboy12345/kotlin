@@ -32,9 +32,8 @@ fun createPackageDeclarationsStubs(
     protoContainer: ProtoContainer.Package,
     packageProto: ProtoBuf.Package
 ) {
-    createDeclarationsStubs(
-        parentStub, outerContext, protoContainer, packageProto.functionList, packageProto.propertyList, packageProto.typeAliasList
-    )
+    createDeclarationsStubs(parentStub, outerContext, protoContainer, packageProto.functionList, packageProto.propertyList)
+    createTypeAliasesStub(parentStub, outerContext, protoContainer, packageProto.typeAliasList)
 }
 
 fun createDeclarationsStubs(
@@ -42,8 +41,7 @@ fun createDeclarationsStubs(
     outerContext: ClsStubBuilderContext,
     protoContainer: ProtoContainer,
     functionProtos: List<ProtoBuf.Function>,
-    propertyProtos: List<ProtoBuf.Property>,
-    typeAliasesProtos: List<ProtoBuf.TypeAlias>
+    propertyProtos: List<ProtoBuf.Property>
 ) {
     for (propertyProto in propertyProtos) {
         if (!shouldSkip(propertyProto.flags, outerContext.nameResolver.getName(propertyProto.name))) {
@@ -55,7 +53,14 @@ fun createDeclarationsStubs(
             FunctionClsStubBuilder(parentStub, outerContext, protoContainer, functionProto).build()
         }
     }
+}
 
+fun createTypeAliasesStub(
+    parentStub: StubElement<out PsiElement>,
+    outerContext: ClsStubBuilderContext,
+    protoContainer: ProtoContainer,
+    typeAliasesProtos: List<ProtoBuf.TypeAlias>
+) {
     for (typeAliasProto in typeAliasesProtos) {
         createTypeAliasStub(parentStub, typeAliasProto, protoContainer, outerContext)
     }
