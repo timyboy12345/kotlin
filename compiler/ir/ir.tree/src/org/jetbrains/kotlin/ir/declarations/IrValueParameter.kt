@@ -33,6 +33,11 @@ abstract class IrValueParameter : IrValueDeclaration(), IrSymbolDeclaration<IrVa
     abstract val isCrossinline: Boolean
     abstract val isNoinline: Boolean
 
+    // Parameters are not assignable by default. However, in the IR, assignments to parameters are used
+    // to implement default argument stubs. If the default value is to be used, the value is assigned
+    // to the parameter.
+    abstract val isAssignable: Boolean
+
     abstract var defaultValue: IrExpressionBody?
 
     override fun <R, D> accept(visitor: IrElementVisitor<R, D>, data: D): R =

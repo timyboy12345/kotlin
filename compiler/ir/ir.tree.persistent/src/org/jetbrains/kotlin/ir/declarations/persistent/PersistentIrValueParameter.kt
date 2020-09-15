@@ -40,7 +40,8 @@ internal class PersistentIrValueParameter(
     override val type: IrType,
     override val varargElementType: IrType?,
     override val isCrossinline: Boolean,
-    override val isNoinline: Boolean
+    override val isNoinline: Boolean,
+    override val isAssignable: Boolean
 ) : IrValueParameter(),
     PersistentIrDeclarationBase<ValueParameterCarrier>,
     ValueParameterCarrier {

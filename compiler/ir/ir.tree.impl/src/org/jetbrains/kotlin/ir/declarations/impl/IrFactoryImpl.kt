@@ -235,8 +235,9 @@ object IrFactoryImpl : IrFactory {
         varargElementType: IrType?,
         isCrossinline: Boolean,
         isNoinline: Boolean,
+        isAssignable: Boolean,
     ): IrValueParameter =
-        IrValueParameterImpl(startOffset, endOffset, origin, symbol, name, index, type, varargElementType, isCrossinline, isNoinline)
+        IrValueParameterImpl(startOffset, endOffset, origin, symbol, name, index, type, varargElementType, isCrossinline, isNoinline, isAssignable)
 
     override fun createExpressionBody(
         startOffset: Int,
