@@ -638,7 +638,7 @@ open class IrBasedClassDescriptor(owner: IrClass) : ClassDescriptor, IrBasedDecl
                              if (parent is IrClass && current is IrClass && !current.isInner) null
                              else parent
                          })
-            .flatMap { it.typeParameters }
+            .flatMap { (it as? IrClass)?.typeParameters.orEmpty() }
             .map { it.toIrBasedDescriptor() }
             .toList()
 

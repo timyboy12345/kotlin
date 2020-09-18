@@ -618,7 +618,7 @@ open class WrappedClassDescriptor : ClassDescriptor, WrappedDeclarationDescripto
                              if (parent is IrClass && current is IrClass && !current.isInner) null
                              else parent
                          })
-            .flatMap { it.typeParameters }
+            .flatMap { (it as? IrClass)?.typeParameters.orEmpty() }
             .map { it.descriptor }
             .toList()
 
