@@ -175,7 +175,15 @@ projectTest(parallel = true) {
     useJUnitPlatform()
     distribution {
         enabled.set(true)
-        maxRemoteExecutors.set(20)
+        maxRemoteExecutors.set(2)
+        maxLocalExecutors.set(0)
+    }
+
+    doFirst {
+        println("# files: ${inputs.files.files.size}")
+        inputs.files.files.forEach {
+            println("- $it")
+        }
     }
 }
 
