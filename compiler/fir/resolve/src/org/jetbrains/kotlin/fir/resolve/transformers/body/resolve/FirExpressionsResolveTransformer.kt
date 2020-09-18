@@ -336,7 +336,7 @@ open class FirExpressionsResolveTransformer(transformer: FirBodyResolveTransform
     ): CompositeTransformResult<FirStatement> {
         require(assignmentOperatorStatement.operation != FirOperation.ASSIGN)
 
-        assignmentOperatorStatement.annotations.forEach { it.accept(this, data) }
+        assignmentOperatorStatement.transformAnnotations(transformer, ResolutionMode.ContextIndependent)
         val leftArgument = assignmentOperatorStatement.leftArgument.transformSingle(transformer, ResolutionMode.ContextIndependent)
         val rightArgument = assignmentOperatorStatement.rightArgument.transformSingle(transformer, ResolutionMode.ContextDependent)
 
@@ -561,7 +561,7 @@ open class FirExpressionsResolveTransformer(transformer: FirBodyResolveTransform
         data: ResolutionMode,
     ): CompositeTransformResult<FirStatement> {
         // val resolvedAssignment = transformCallee(variableAssignment)
-        variableAssignment.annotations.forEach { it.accept(this, data) }
+        variableAssignment.transformAnnotations(transformer, ResolutionMode.ContextIndependent)
         val resolvedAssignment = callResolver.resolveVariableAccessAndSelectCandidate(variableAssignment)
         val result = if (resolvedAssignment is FirVariableAssignment) {
             val completeAssignment = callCompleter.completeCall(resolvedAssignment, noExpectedType).result // TODO: check
@@ -687,7 +687,7 @@ open class FirExpressionsResolveTransformer(transformer: FirBodyResolveTransform
         constExpression: FirConstExpression<T>,
         data: ResolutionMode,
     ): CompositeTransformResult<FirStatement> {
-        constExpression.annotations.forEach { it.accept(this, data) }
+        constExpression.transformAnnotations(transformer, ResolutionMode.ContextIndependent)
 
         val type = when (val kind = constExpression.kind) {
             FirConstKind.IntegerLiteral, FirConstKind.UnsignedIntegerLiteral -> {
